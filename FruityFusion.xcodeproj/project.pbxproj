@@ -34,11 +34,19 @@
 		CE958EB52B3543CB00541C1C /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE958EB42B3543CB00541C1C /* TitleView.swift */; };
 		CE958EB82B3549D300541C1C /* AdMobBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE958EB72B3549D300541C1C /* AdMobBannerView.swift */; };
 		CEA743D12B365A8A00DFA3CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEA743D02B365A8A00DFA3CF /* Assets.xcassets */; };
-		CEA743D32B36758B00DFA3CF /* StrawberryTileImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA743D22B36758B00DFA3CF /* StrawberryTileImage.png */; };
 		CEA743D72B36B62200DFA3CF /* TermsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA743D62B36B62200DFA3CF /* TermsView.swift */; };
 		CEA743D92B36B67400DFA3CF /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA743D82B36B67400DFA3CF /* PrivacyPolicyView.swift */; };
 		CEA743DB2B36B6A400DFA3CF /* TermsAndPrivacyAgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA743DA2B36B6A400DFA3CF /* TermsAndPrivacyAgreementView.swift */; };
 		CEA743DE2B36C30300DFA3CF /* InterstitialAdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA743DD2B36C30300DFA3CF /* InterstitialAdManager.swift */; };
+		CEA7447F2B3ADA4B00DFA3CF /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7447E2B3ADA4B00DFA3CF /* AudioManager.swift */; };
+		CEA744812B3ADABB00DFA3CF /* backgroundMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEA744802B3ADABB00DFA3CF /* backgroundMusic.mp3 */; };
+		CEA744832B3ADB6200DFA3CF /* gameMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEA744822B3ADB6200DFA3CF /* gameMusic.mp3 */; };
+		CEA744852B3ADBB900DFA3CF /* StrawberryTileImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA744842B3ADBB900DFA3CF /* StrawberryTileImage.png */; };
+		CEA744872B3AE15F00DFA3CF /* TitleImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA744862B3AE15F00DFA3CF /* TitleImage.png */; };
+		CEA744892B3AE52B00DFA3CF /* mergeSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEA744882B3AE52B00DFA3CF /* mergeSound.mp3 */; };
+		CEA7448B2B3AE55E00DFA3CF /* watermelonMergeSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEA7448A2B3AE55E00DFA3CF /* watermelonMergeSound.mp3 */; };
+		CEA7448D2B3AE6F900DFA3CF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7448C2B3AE6F900DFA3CF /* SettingsView.swift */; };
+		CEA7448F2B3AEEEA00DFA3CF /* gameOverSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEA7448E2B3AEEEA00DFA3CF /* gameOverSound.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,11 +79,19 @@
 		CE958EB62B3548BB00541C1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CE958EB72B3549D300541C1C /* AdMobBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobBannerView.swift; sourceTree = "<group>"; };
 		CEA743D02B365A8A00DFA3CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CEA743D22B36758B00DFA3CF /* StrawberryTileImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = StrawberryTileImage.png; path = ../../../../../../../Downloads/StrawberryTileImage.png; sourceTree = "<group>"; };
 		CEA743D62B36B62200DFA3CF /* TermsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsView.swift; sourceTree = "<group>"; };
 		CEA743D82B36B67400DFA3CF /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		CEA743DA2B36B6A400DFA3CF /* TermsAndPrivacyAgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndPrivacyAgreementView.swift; sourceTree = "<group>"; };
 		CEA743DD2B36C30300DFA3CF /* InterstitialAdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdManager.swift; sourceTree = "<group>"; };
+		CEA7447E2B3ADA4B00DFA3CF /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		CEA744802B3ADABB00DFA3CF /* backgroundMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = backgroundMusic.mp3; sourceTree = "<group>"; };
+		CEA744822B3ADB6200DFA3CF /* gameMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameMusic.mp3; sourceTree = "<group>"; };
+		CEA744842B3ADBB900DFA3CF /* StrawberryTileImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StrawberryTileImage.png; sourceTree = "<group>"; };
+		CEA744862B3AE15F00DFA3CF /* TitleImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TitleImage.png; sourceTree = "<group>"; };
+		CEA744882B3AE52B00DFA3CF /* mergeSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = mergeSound.mp3; sourceTree = "<group>"; };
+		CEA7448A2B3AE55E00DFA3CF /* watermelonMergeSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = watermelonMergeSound.mp3; sourceTree = "<group>"; };
+		CEA7448C2B3AE6F900DFA3CF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		CEA7448E2B3AEEEA00DFA3CF /* gameOverSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOverSound.mp3; sourceTree = "<group>"; };
 		D151CC1F70CD43106BFDE08A /* Pods_FruityFusion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FruityFusion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E11833AC59103C6DE6A356E3 /* Pods-FruityFusion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FruityFusion.release.xcconfig"; path = "Target Support Files/Pods-FruityFusion/Pods-FruityFusion.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -171,6 +187,7 @@
 				CE958E8D2B352F1C00541C1C /* GameBoardView.swift */,
 				CE958E912B352FED00541C1C /* TileView.swift */,
 				CE958E932B35301A00541C1C /* ScoreView.swift */,
+				CEA7448C2B3AE6F900DFA3CF /* SettingsView.swift */,
 				CEA743DA2B36B6A400DFA3CF /* TermsAndPrivacyAgreementView.swift */,
 				CEA743D62B36B62200DFA3CF /* TermsView.swift */,
 				CEA743D82B36B67400DFA3CF /* PrivacyPolicyView.swift */,
@@ -198,6 +215,7 @@
 		CE958E852B352A4D00541C1C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CEA743D02B365A8A00DFA3CF /* Assets.xcassets */,
 				CE958E9D2B35336100541C1C /* Sounds */,
 				CE958E9B2B35334F00541C1C /* Images */,
 			);
@@ -207,6 +225,7 @@
 		CE958E862B352A5900541C1C /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				CEA7447E2B3ADA4B00DFA3CF /* AudioManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -214,9 +233,9 @@
 		CE958E9B2B35334F00541C1C /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				CEA743D02B365A8A00DFA3CF /* Assets.xcassets */,
+				CEA744862B3AE15F00DFA3CF /* TitleImage.png */,
 				CE958E9E2B353FDC00541C1C /* CherryTileImage.png */,
-				CEA743D22B36758B00DFA3CF /* StrawberryTileImage.png */,
+				CEA744842B3ADBB900DFA3CF /* StrawberryTileImage.png */,
 				CE958EA22B35400E00541C1C /* GrapeTileImage.png */,
 				CE958EA42B35406C00541C1C /* DekoponTileImage.png */,
 				CE958EA62B3540AE00541C1C /* PersimmonTileImage.png */,
@@ -233,6 +252,11 @@
 		CE958E9D2B35336100541C1C /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				CEA744802B3ADABB00DFA3CF /* backgroundMusic.mp3 */,
+				CEA744822B3ADB6200DFA3CF /* gameMusic.mp3 */,
+				CEA744882B3AE52B00DFA3CF /* mergeSound.mp3 */,
+				CEA7448A2B3AE55E00DFA3CF /* watermelonMergeSound.mp3 */,
+				CEA7448E2B3AEEEA00DFA3CF /* gameOverSound.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -306,18 +330,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEA744852B3ADBB900DFA3CF /* StrawberryTileImage.png in Resources */,
 				CE958EA92B3540EE00541C1C /* AppleTileImage.png in Resources */,
 				CE958EB12B3541F800541C1C /* MelonTileImage.png in Resources */,
+				CEA7448F2B3AEEEA00DFA3CF /* gameOverSound.mp3 in Resources */,
+				CEA7448B2B3AE55E00DFA3CF /* watermelonMergeSound.mp3 in Resources */,
 				CE958EA72B3540AE00541C1C /* PersimmonTileImage.png in Resources */,
 				CE958EAB2B35412B00541C1C /* PearTileImage.png in Resources */,
-				CEA743D32B36758B00DFA3CF /* StrawberryTileImage.png in Resources */,
 				CE958EB32B35423800541C1C /* WatermelonTileImage.png in Resources */,
+				CEA744872B3AE15F00DFA3CF /* TitleImage.png in Resources */,
 				CEA743D12B365A8A00DFA3CF /* Assets.xcassets in Resources */,
 				CE958E7B2B3529E800541C1C /* Preview Assets.xcassets in Resources */,
+				CEA744812B3ADABB00DFA3CF /* backgroundMusic.mp3 in Resources */,
 				CE958EAF2B3541B600541C1C /* PeachTileImage.png in Resources */,
+				CEA744892B3AE52B00DFA3CF /* mergeSound.mp3 in Resources */,
 				CE958EA52B35406C00541C1C /* DekoponTileImage.png in Resources */,
 				CE958EA32B35400E00541C1C /* GrapeTileImage.png in Resources */,
 				CE958E9F2B353FDC00541C1C /* CherryTileImage.png in Resources */,
+				CEA744832B3ADB6200DFA3CF /* gameMusic.mp3 in Resources */,
 				CE958EAD2B35417D00541C1C /* PineappleTileImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,8 +403,10 @@
 			files = (
 				CE958E982B3531E900541C1C /* ScoreViewModel.swift in Sources */,
 				CEA743DB2B36B6A400DFA3CF /* TermsAndPrivacyAgreementView.swift in Sources */,
+				CEA7447F2B3ADA4B00DFA3CF /* AudioManager.swift in Sources */,
 				CE958E8A2B352C9000541C1C /* GameBoard.swift in Sources */,
 				CE958EB82B3549D300541C1C /* AdMobBannerView.swift in Sources */,
+				CEA7448D2B3AE6F900DFA3CF /* SettingsView.swift in Sources */,
 				CE958E882B352AD900541C1C /* FruitTile.swift in Sources */,
 				CE958E942B35301A00541C1C /* ScoreView.swift in Sources */,
 				CE958E9A2B3532DC00541C1C /* GameView.swift in Sources */,

@@ -5,6 +5,11 @@ import SwiftUI
 struct GameView: View {
     @StateObject var viewModel = GameViewModel()
     @State private var interstitialAdManager = InterstitialAdManager()
+    
+    init() {
+        AudioManager.shared.stopBackgroundMusic()  // 背景音楽を停止
+        AudioManager.shared.playGameMusic()        // ゲーム用の音楽を再生
+    }
 
     var body: some View {
         VStack {
@@ -37,11 +42,9 @@ struct GameView: View {
             
             Button(action: {
                 if viewModel.isGameOver {
-                    // ゲームオーバーの時に広告を表示
                     if let controller = topMostViewController() {
                         interstitialAdManager.showAd(from: controller)
                     } else {
-                        // 広告が準備されていない場合、ユーザーに通知する
                         print("広告はまだ準備ができていません。しばらくしてからもう一度お試しください。")
                     }
                 }
@@ -54,6 +57,16 @@ struct GameView: View {
                     .background(Color.blue)
                     .cornerRadius(10)
             }
+        }
+        .onAppear {
+            // GameViewが表示されるときに呼ばれる
+            AudioManager.shared.stopBackgroundMusic()  // 背景音楽を停止
+            AudioManager.shared.playGameMusic()        // ゲーム用の音楽を再生
+        }
+        .onDisappear {
+            // GameViewが非表示になるときに呼ばれる
+            AudioManager.shared.stopGameMusic()  // ゲーム用の音楽を停止
+            AudioManager.shared.playBackgroundMusic()  // 背景音楽を再生
         }
     }
     
@@ -75,11 +88,4 @@ struct GameView: View {
         return topController
     }
 
-}
-
-// プレビュー用
-struct GameView_Previews: PreviewProvider {
-    static var previews: some View {
-        GameView()
-    }
 }

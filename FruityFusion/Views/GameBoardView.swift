@@ -4,6 +4,7 @@ import SwiftUI
 
 struct GameBoardView: View {
     @ObservedObject var viewModel: GameViewModel
+    @State private var animate = false
 
     var body: some View {
         VStack {
@@ -24,6 +25,13 @@ struct GameBoardView: View {
                     .font(.largeTitle)
                     .foregroundColor(.red)
                     .padding()
+                    .scaleEffect(animate ? 1.2 : 1.0)
+                    .opacity(animate ? 0.5 : 1.0)
+                    .onAppear {
+                        withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+                            self.animate.toggle()
+                        }
+                    }
             }
         }
         .padding(.horizontal)

@@ -45,6 +45,7 @@ class GameViewModel: ObservableObject {
         addRandomTile()
         if gameBoard.isGameOver() {
             isGameOver = true
+            AudioManager.shared.playGameOverSound()
         }
     }
 

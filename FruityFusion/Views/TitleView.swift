@@ -3,6 +3,9 @@
 import SwiftUI
 
 struct TitleView: View {
+    @State private var isSettingsPresented = false
+    @State private var isSoundEnabled: Bool = UserDefaults.standard.bool(forKey: "isSoundEnabled")
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -14,7 +17,7 @@ struct TitleView: View {
                     .padding()
                 
                 // サブタイトルテキスト
-                Text("2048スタイルのパズルゲームで、果物を合体させてスコアを稼ごう！")
+                Text("果物を合体させてスコアを稼ごう！")
                     .font(.title3)
                     .foregroundColor(.gray)
                     .padding()
@@ -28,17 +31,27 @@ struct TitleView: View {
                         .cornerRadius(10)
                         .shadow(radius: 5)
                 }
+                
+                Button(action: {
+                    isSettingsPresented = true
+                }) {
+                    Text("設定") // システムアイコンを使用
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.brown)
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-    }
-}
-
-// プレビュー用
-struct TitleView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            TitleView()
+        .onAppear {
+            AudioManager.shared.stopGameMusic()        // ゲーム音楽を停止
+            AudioManager.shared.playBackgroundMusic()  // 背景音楽を再生
+        }
+        .sheet(isPresented: $isSettingsPresented) {
+            // 設定画面を表示
+            SettingsView(isSoundEnabled: $isSoundEnabled)
         }
     }
 }

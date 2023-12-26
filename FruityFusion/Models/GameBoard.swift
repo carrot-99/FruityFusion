@@ -93,11 +93,13 @@ struct GameBoard {
         while !row.isEmpty {
             if row.count > 1 && row[0].fruit == row[1].fruit {
                 if row[0].fruit == .watermelon {
+                    AudioManager.shared.playWatermelonMergeSound()
                     scoreManager?.addScore(for: FruitTile(fruit: .superWatermelon, score: 4096))
                     newRow[targetIndex] = nil
                     targetIndex += 1
                     newRow[targetIndex] = nil
                 } else {
+                    AudioManager.shared.playMergeSound() 
                     let mergedTile = FruitTile(fruit: row[0].fruit.next())
                     newRow[targetIndex] = mergedTile
                     scoreManager?.addScore(for: mergedTile)
