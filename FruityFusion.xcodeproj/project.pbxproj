@@ -47,6 +47,7 @@
 		CEA7448B2B3AE55E00DFA3CF /* watermelonMergeSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEA7448A2B3AE55E00DFA3CF /* watermelonMergeSound.mp3 */; };
 		CEA7448D2B3AE6F900DFA3CF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7448C2B3AE6F900DFA3CF /* SettingsView.swift */; };
 		CEA7448F2B3AEEEA00DFA3CF /* gameOverSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEA7448E2B3AEEEA00DFA3CF /* gameOverSound.mp3 */; };
+		CEA744912B3B04A900DFA3CF /* BackgroundImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA744902B3B04A900DFA3CF /* BackgroundImage.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,7 @@
 		CEA7448A2B3AE55E00DFA3CF /* watermelonMergeSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = watermelonMergeSound.mp3; sourceTree = "<group>"; };
 		CEA7448C2B3AE6F900DFA3CF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		CEA7448E2B3AEEEA00DFA3CF /* gameOverSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOverSound.mp3; sourceTree = "<group>"; };
+		CEA744902B3B04A900DFA3CF /* BackgroundImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundImage.png; sourceTree = "<group>"; };
 		D151CC1F70CD43106BFDE08A /* Pods_FruityFusion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FruityFusion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E11833AC59103C6DE6A356E3 /* Pods-FruityFusion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FruityFusion.release.xcconfig"; path = "Target Support Files/Pods-FruityFusion/Pods-FruityFusion.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -233,6 +235,7 @@
 		CE958E9B2B35334F00541C1C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CEA744902B3B04A900DFA3CF /* BackgroundImage.png */,
 				CEA744862B3AE15F00DFA3CF /* TitleImage.png */,
 				CE958E9E2B353FDC00541C1C /* CherryTileImage.png */,
 				CEA744842B3ADBB900DFA3CF /* StrawberryTileImage.png */,
@@ -343,6 +346,7 @@
 				CE958E7B2B3529E800541C1C /* Preview Assets.xcassets in Resources */,
 				CEA744812B3ADABB00DFA3CF /* backgroundMusic.mp3 in Resources */,
 				CE958EAF2B3541B600541C1C /* PeachTileImage.png in Resources */,
+				CEA744912B3B04A900DFA3CF /* BackgroundImage.png in Resources */,
 				CEA744892B3AE52B00DFA3CF /* mergeSound.mp3 in Resources */,
 				CE958EA52B35406C00541C1C /* DekoponTileImage.png in Resources */,
 				CE958EA32B35400E00541C1C /* GrapeTileImage.png in Resources */,

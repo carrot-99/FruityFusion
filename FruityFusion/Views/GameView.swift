@@ -12,62 +12,74 @@ struct GameView: View {
     }
 
     var body: some View {
-        VStack {
-            HStack {
-                ScoreView(scoreManager: viewModel.scoreManager)
-                    .padding()
+        GeometryReader { geometry in
+            ZStack {
+                Image("BackgroundImage")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .edgesIgnoringSafeArea(.all)
                 
-                Text("ハイスコア: \(viewModel.scoreManager.highScore)")
-                    .padding()
-                    .background(Color.orange)
-                    .cornerRadius(10)
-                    .foregroundColor(.white)
-                    .shadow(radius: 5)
-            }
-            
-            GameBoardView(viewModel: viewModel)
-                .padding()
-
-            .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
-                .onEnded({ value in
-                    // スワイプ方向を判定し、対応するアクションを実行
-                    if abs(value.translation.width) > abs(value.translation.height) {
-                        // 横方向のスワイプ
-                        value.translation.width < 0 ? viewModel.swipeLeft() : viewModel.swipeRight()
-                    } else {
-                        // 縦方向のスワイプ
-                        value.translation.height < 0 ? viewModel.swipeUp() : viewModel.swipeDown()
+                VStack {
+                    HStack {
+                        ScoreView(scoreManager: viewModel.scoreManager)
+                            .padding()
+                        
+                        Text("ハイスコア: \(viewModel.scoreManager.highScore)")
+                            .padding()
+                            .background(Color.orange)
+                            .cornerRadius(10)
+                            .foregroundColor(.white)
+                            .shadow(radius: 5)
                     }
-                }))
-            
-            Button(action: {
-                if viewModel.isGameOver {
-                    if let controller = topMostViewController() {
-                        interstitialAdManager.showAd(from: controller)
-                    } else {
-                        print("広告はまだ準備ができていません。しばらくしてからもう一度お試しください。")
+                    
+                    GameBoardView(viewModel: viewModel)
+                        .padding()
+                        .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
+                            .onEnded({ value in
+                                // スワイプ方向を判定し、対応するアクションを実行
+                                if abs(value.translation.width) > abs(value.translation.height) {
+                                    // 横方向のスワイプ
+                                    value.translation.width < 0 ? viewModel.swipeLeft() : viewModel.swipeRight()
+                                } else {
+                                    // 縦方向のスワイプ
+                                    value.translation.height < 0 ? viewModel.swipeUp() : viewModel.swipeDown()
+                                }
+                            }))
+                    
+                    Button(action: {
+                        if viewModel.isGameOver {
+                            if let controller = topMostViewController() {
+                                interstitialAdManager.showAd(from: controller)
+                            } else {
+                                print("広告はまだ準備ができていません。しばらくしてからもう一度お試しください。")
+                            }
+                        }
+                        viewModel.startGame()
+                        viewModel.isGameOver = false
+                    }) {
+                        Text("ゲームをリセット")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(10)
                     }
                 }
-                viewModel.startGame()
-                viewModel.isGameOver = false
-            }) {
-                Text("ゲームをリセット")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .clipped()
+            }
+            .onAppear {
+                // GameViewが表示されるときに呼ばれる
+                AudioManager.shared.stopBackgroundMusic()  // 背景音楽を停止
+                AudioManager.shared.playGameMusic()        // ゲーム用の音楽を再生
+            }
+            .onDisappear {
+                // GameViewが非表示になるときに呼ばれる
+                AudioManager.shared.stopGameMusic()  // ゲーム用の音楽を停止
+                AudioManager.shared.playBackgroundMusic()  // 背景音楽を再生
             }
         }
-        .onAppear {
-            // GameViewが表示されるときに呼ばれる
-            AudioManager.shared.stopBackgroundMusic()  // 背景音楽を停止
-            AudioManager.shared.playGameMusic()        // ゲーム用の音楽を再生
-        }
-        .onDisappear {
-            // GameViewが非表示になるときに呼ばれる
-            AudioManager.shared.stopGameMusic()  // ゲーム用の音楽を停止
-            AudioManager.shared.playBackgroundMusic()  // 背景音楽を再生
-        }
+        .edgesIgnoringSafeArea(.all)
     }
     
     private func topMostViewController() -> UIViewController? {
