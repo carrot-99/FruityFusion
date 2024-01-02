@@ -2,12 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-1407897196194439~1175265115</string>
 	<key>AdBannerUnitID</key>
 	<string>ca-app-pub-1407897196194439/4324172631</string>
 	<key>AdInterstitialUnitID</key>
 	<string>ca-app-pub-1407897196194439/6642928808</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-1407897196194439~1175265115</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>

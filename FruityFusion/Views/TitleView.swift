@@ -19,7 +19,7 @@ struct TitleView: View {
                     VStack {
                         Spacer() // これにより、要素が縦方向の中央に配置されます
 
-                        Text("フルーティ\nフュージョン")
+                        Text("FRUITY\nFUSION")
                             .font(.system(size: 48, weight: .heavy, design: .rounded))
                             .foregroundColor(.white)
                             .shadow(color: .gray, radius: 2, x: 2, y: 2)
