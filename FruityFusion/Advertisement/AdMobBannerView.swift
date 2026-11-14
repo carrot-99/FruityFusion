@@ -3,41 +3,35 @@
 import SwiftUI
 import GoogleMobileAds
 
-struct AdMobBannerView: UIViewRepresentable {
-    let adUnitID: String
-    
-    init() {
-        if let adUnitID = Bundle.main.infoDictionary?["AdBannerUnitID"] as? String {
-            self.adUnitID = adUnitID
-        } else {
-            fatalError("AdUnitID not found in Info dictionary")
+/// 画面幅に合わせたアダプティブバナー。広告IDが無い場合は何も表示しない。
+struct AdMobBannerView: View {
+    private let adUnitID = Bundle.main.infoDictionary?["AdBannerUnitID"] as? String
+
+    var body: some View {
+        if let adUnitID {
+            let adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(UIScreen.main.bounds.width)
+            BannerRepresentable(adUnitID: adUnitID, adSize: adSize)
+                .frame(width: adSize.size.width, height: adSize.size.height)
+                .frame(maxWidth: .infinity)
         }
     }
-    
+}
+
+private struct BannerRepresentable: UIViewRepresentable {
+    let adUnitID: String
+    let adSize: GADAdSize
+
     func makeUIView(context: Context) -> GADBannerView {
-        let banner = GADBannerView(adSize: getAdSize())
-        banner.adUnitID = self.adUnitID
-
-        let request = GADRequest()
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            request.scene = windowScene
-            banner.rootViewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController
-        }
-
-        banner.load(request)
+        let banner = GADBannerView(adSize: adSize)
+        banner.adUnitID = adUnitID
+        banner.rootViewController = UIApplication.shared.topViewController
+        banner.load(GADRequest())
         return banner
     }
 
-    func updateUIView(_ uiView: GADBannerView, context: Context) {
-        // バナー広告のビューを更新する必要がある場合に実装
-    }
-    
-    private func getAdSize() -> GADAdSize {
-        // 画面の幅に基づいて適切な広告サイズを取得
-        let frame = UIScreen.main.bounds
-        let viewWidth = frame.size.width
-
-        // 画面の向きに応じた適切な広告サイズを返す
-        return GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(viewWidth)
+    func updateUIView(_ banner: GADBannerView, context: Context) {
+        if banner.rootViewController == nil {
+            banner.rootViewController = UIApplication.shared.topViewController
+        }
     }
 }

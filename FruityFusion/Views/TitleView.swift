@@ -4,75 +4,98 @@ import SwiftUI
 
 struct TitleView: View {
     @State private var isSettingsPresented = false
-    @State private var isSoundEnabled: Bool = UserDefaults.standard.bool(forKey: "isSoundEnabled")
+    @State private var hasSavedGame = false
+    @State private var highScore = 0
+    @State private var isLogoAnimating = false
 
     var body: some View {
         NavigationView {
-            GeometryReader { geometry in
-                ZStack {
-                    Image("TitleImage")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-                        .clipped()
+            ZStack {
+                ScreenBackground(imageName: "TitleImage")
 
-                    VStack {
-                        Spacer() // これにより、要素が縦方向の中央に配置されます
+                VStack(spacing: 14) {
+                    Spacer()
 
-                        Text("FRUITY\nFUSION")
-                            .font(.system(size: 48, weight: .heavy, design: .rounded))
+                    logo
+
+                    if highScore > 0 {
+                        Label("ベスト \(highScore)", systemImage: "crown.fill")
+                            .font(Theme.roundedFont(.headline))
                             .foregroundColor(.white)
-                            .shadow(color: .gray, radius: 2, x: 2, y: 2)
-                            .padding()
-                            .background(Color.mint)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.white, lineWidth: 5)
-                            )
-                            .padding(.horizontal)
-
-                        NavigationLink(destination: GameView()) {
-                            Text("ゲームを始める")
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: .infinity) // これによりボタンが親ビューの幅いっぱいに広がります
-                                .background(Color.green)
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
-                        }
-                        .padding(.horizontal)
-                        .padding(.top, 20)
-
-                        Button(action: {
-                            isSettingsPresented = true
-                        }) {
-                            Text("設定")
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: .infinity) // これも同様に幅いっぱいに広がります
-                                .background(Color.brown)
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
-                        }
-                        .padding(.horizontal)
-                        .padding(.top, 10)
-
-                        Spacer() // これも同様
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(Capsule().fill(Theme.secondary))
+                            .shadow(radius: 3)
                     }
-                    .frame(width: geometry.size.width) // VStackの幅を設定
+
+                    Spacer()
+
+                    if hasSavedGame {
+                        NavigationLink(destination: GameView(resume: true)) {
+                            Label("つづきから", systemImage: "play.fill")
+                        }
+                        .buttonStyle(GameButtonStyle(color: Theme.primary))
+                    }
+
+                    NavigationLink(destination: GameView(resume: false)) {
+                        Label("あたらしく始める", systemImage: hasSavedGame ? "plus" : "play.fill")
+                    }
+                    .buttonStyle(GameButtonStyle(color: hasSavedGame ? Theme.secondary : Theme.primary))
+
+                    Button {
+                        isSettingsPresented = true
+                    } label: {
+                        Label("設定", systemImage: "gearshape.fill")
+                    }
+                    .buttonStyle(GameButtonStyle(color: Theme.neutral))
+
+                    Spacer()
                 }
+                .padding(.horizontal, 32)
+                .frame(maxWidth: 460)
             }
-            .edgesIgnoringSafeArea(.all) // これにより背景画像が全画面になります
+            .navigationBarHidden(true)
+            .onAppear(perform: refresh)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear {
-            AudioManager.shared.stopGameMusic()
-            AudioManager.shared.playBackgroundMusic()
+        .navigationViewStyle(.stack)
+        .sheet(isPresented: $isSettingsPresented, onDismiss: refresh) {
+            SettingsView()
         }
-        .sheet(isPresented: $isSettingsPresented) {
-            // 設定画面を表示
-            SettingsView(isSoundEnabled: $isSoundEnabled)
-        }
+    }
+
+    private var logo: some View {
+        Text("FRUITY\nFUSION")
+            .font(.system(size: 52, weight: .heavy, design: .rounded))
+            .multilineTextAlignment(.center)
+            .foregroundColor(.white)
+            .shadow(color: .black.opacity(0.25), radius: 2, x: 2, y: 2)
+            .padding(.vertical, 16)
+            .padding(.horizontal, 28)
+            .background(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(Color.mint)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .stroke(Color.white, lineWidth: 5)
+            )
+            .rotationEffect(.degrees(isLogoAnimating ? 2 : -2))
+            .animation(.easeInOut(duration: 1.6).repeatForever(autoreverses: true), value: isLogoAnimating)
+            .onAppear { isLogoAnimating = true }
+            .accessibilityLabel("Fruity Fusion")
+            .accessibilityAddTraits(.isHeader)
+    }
+
+    private func refresh() {
+        let storage = GameStorage.standard
+        hasSavedGame = storage.hasSavedGame
+        highScore = storage.highScore
+        AudioManager.shared.playMusic(.title)
+    }
+}
+
+struct TitleView_Previews: PreviewProvider {
+    static var previews: some View {
+        TitleView()
     }
 }
