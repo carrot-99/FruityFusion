@@ -3,47 +3,69 @@
 import GoogleMobileAds
 import UIKit
 
-class InterstitialAdManager: NSObject, GADFullScreenContentDelegate {
+/// インタースティシャル広告の読み込みと表示を管理する
+final class InterstitialAdManager: NSObject, GADFullScreenContentDelegate {
+    static let shared = InterstitialAdManager()
+
     private var interstitialAd: GADInterstitialAd?
-    @Published var isAdReady = false
-    
-    override init() {
+    private var isLoading = false
+    private let adUnitID = Bundle.main.infoDictionary?["AdInterstitialUnitID"] as? String
+
+    var isReady: Bool { interstitialAd != nil }
+
+    private override init() {
         super.init()
-        loadInterstitialAd()
     }
-    
-    private func loadInterstitialAd() {
-        let adUnitID: String
-        if let adUnitIDFromPlist = Bundle.main.infoDictionary?["AdInterstitialUnitID"] as? String {
-            adUnitID = adUnitIDFromPlist
-        } else {
-            fatalError("AdUnitID not found in Info.plist")
-        }
-        
-        let request = GADRequest()
-        GADInterstitialAd.load(withAdUnitID: adUnitID, request: request) { [weak self] (ad, error) in
-            if let error = error {
-                print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+
+    func preload() {
+        guard let adUnitID, interstitialAd == nil, !isLoading else { return }
+        isLoading = true
+        GADInterstitialAd.load(withAdUnitID: adUnitID, request: GADRequest()) { [weak self] ad, error in
+            guard let self else { return }
+            self.isLoading = false
+            if let error {
+                print("Failed to load interstitial ad: \(error.localizedDescription)")
                 return
             }
-            self?.interstitialAd = ad
-            self?.interstitialAd?.fullScreenContentDelegate = self
-            self?.isAdReady = true
+            ad?.fullScreenContentDelegate = self
+            self.interstitialAd = ad
         }
     }
-    
-    // 広告を表示するメソッド
-    func showAd(from rootViewController: UIViewController) {
-        if let ad = interstitialAd {
-            ad.present(fromRootViewController: rootViewController)
-        } else {
-            print("Ad wasn't ready")
+
+    /// 準備ができていれば最前面の画面から広告を表示する
+    func showIfReady() {
+        guard let ad = interstitialAd, let controller = UIApplication.shared.topViewController else {
+            preload()
+            return
         }
+        ad.present(fromRootViewController: controller)
     }
-    
+
     // MARK: - GADFullScreenContentDelegate
+
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        // 広告が閉じられたら新しい広告をロードする
-        loadInterstitialAd()
+        interstitialAd = nil
+        preload()
+    }
+
+    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+        interstitialAd = nil
+        preload()
+    }
+}
+
+extension UIApplication {
+    /// 現在最前面に表示されている ViewController
+    var topViewController: UIViewController? {
+        let keyWindow = connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first { $0.isKeyWindow }
+
+        var top = keyWindow?.rootViewController
+        while let presented = top?.presentedViewController {
+            top = presented
+        }
+        return top
     }
 }

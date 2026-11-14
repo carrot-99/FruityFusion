@@ -18,8 +18,6 @@
 		CE958E902B352F9200541C1C /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE958E8F2B352F9200541C1C /* GameViewModel.swift */; };
 		CE958E922B352FED00541C1C /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE958E912B352FED00541C1C /* TileView.swift */; };
 		CE958E942B35301A00541C1C /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE958E932B35301A00541C1C /* ScoreView.swift */; };
-		CE958E962B35318D00541C1C /* TileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE958E952B35318D00541C1C /* TileViewModel.swift */; };
-		CE958E982B3531E900541C1C /* ScoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE958E972B3531E900541C1C /* ScoreViewModel.swift */; };
 		CE958E9A2B3532DC00541C1C /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE958E992B3532DC00541C1C /* GameView.swift */; };
 		CE958E9F2B353FDC00541C1C /* CherryTileImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CE958E9E2B353FDC00541C1C /* CherryTileImage.png */; };
 		CE958EA32B35400E00541C1C /* GrapeTileImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CE958EA22B35400E00541C1C /* GrapeTileImage.png */; };
@@ -48,6 +46,12 @@
 		CEA7448D2B3AE6F900DFA3CF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA7448C2B3AE6F900DFA3CF /* SettingsView.swift */; };
 		CEA7448F2B3AEEEA00DFA3CF /* gameOverSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CEA7448E2B3AEEEA00DFA3CF /* gameOverSound.mp3 */; };
 		CEA744912B3B04A900DFA3CF /* BackgroundImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA744902B3B04A900DFA3CF /* BackgroundImage.png */; };
+		FF00000000000000000000B1 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF00000000000000000000A1 /* AppSettings.swift */; };
+		FF00000000000000000000B2 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF00000000000000000000A2 /* Haptics.swift */; };
+		FF00000000000000000000B3 /* GameStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF00000000000000000000A3 /* GameStorage.swift */; };
+		FF00000000000000000000B4 /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF00000000000000000000A4 /* GameOverView.swift */; };
+		FF00000000000000000000B5 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF00000000000000000000A5 /* Theme.swift */; };
+		FF00000000000000000000B6 /* FruitChainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF00000000000000000000A6 /* FruitChainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,8 +67,6 @@
 		CE958E8F2B352F9200541C1C /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		CE958E912B352FED00541C1C /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		CE958E932B35301A00541C1C /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
-		CE958E952B35318D00541C1C /* TileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileViewModel.swift; sourceTree = "<group>"; };
-		CE958E972B3531E900541C1C /* ScoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViewModel.swift; sourceTree = "<group>"; };
 		CE958E992B3532DC00541C1C /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		CE958E9E2B353FDC00541C1C /* CherryTileImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CherryTileImage.png; sourceTree = "<group>"; };
 		CE958EA22B35400E00541C1C /* GrapeTileImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GrapeTileImage.png; sourceTree = "<group>"; };
@@ -96,6 +98,12 @@
 		CEA744902B3B04A900DFA3CF /* BackgroundImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundImage.png; sourceTree = "<group>"; };
 		D151CC1F70CD43106BFDE08A /* Pods_FruityFusion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FruityFusion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E11833AC59103C6DE6A356E3 /* Pods-FruityFusion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FruityFusion.release.xcconfig"; path = "Target Support Files/Pods-FruityFusion/Pods-FruityFusion.release.xcconfig"; sourceTree = "<group>"; };
+		FF00000000000000000000A1 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		FF00000000000000000000A2 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		FF00000000000000000000A3 /* GameStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStorage.swift; sourceTree = "<group>"; };
+		FF00000000000000000000A4 /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
+		FF00000000000000000000A5 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		FF00000000000000000000A6 /* FruitChainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FruitChainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +182,7 @@
 		CE958E812B352A2900541C1C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FF00000000000000000000A3 /* GameStorage.swift */,
 				CE958E872B352AD900541C1C /* FruitTile.swift */,
 				CE958E892B352C9000541C1C /* GameBoard.swift */,
 				CE958E8B2B352CF700541C1C /* ScoreManager.swift */,
@@ -184,6 +193,9 @@
 		CE958E822B352A3100541C1C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FF00000000000000000000A6 /* FruitChainView.swift */,
+				FF00000000000000000000A5 /* Theme.swift */,
+				FF00000000000000000000A4 /* GameOverView.swift */,
 				CE958EB42B3543CB00541C1C /* TitleView.swift */,
 				CE958E992B3532DC00541C1C /* GameView.swift */,
 				CE958E8D2B352F1C00541C1C /* GameBoardView.swift */,
@@ -201,8 +213,6 @@
 			isa = PBXGroup;
 			children = (
 				CE958E8F2B352F9200541C1C /* GameViewModel.swift */,
-				CE958E952B35318D00541C1C /* TileViewModel.swift */,
-				CE958E972B3531E900541C1C /* ScoreViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -227,6 +237,8 @@
 		CE958E862B352A5900541C1C /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FF00000000000000000000A2 /* Haptics.swift */,
+				FF00000000000000000000A1 /* AppSettings.swift */,
 				CEA7447E2B3ADA4B00DFA3CF /* AudioManager.swift */,
 			);
 			path = Helpers;
@@ -405,7 +417,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE958E982B3531E900541C1C /* ScoreViewModel.swift in Sources */,
+				FF00000000000000000000B6 /* FruitChainView.swift in Sources */,
+				FF00000000000000000000B5 /* Theme.swift in Sources */,
+				FF00000000000000000000B4 /* GameOverView.swift in Sources */,
+				FF00000000000000000000B3 /* GameStorage.swift in Sources */,
+				FF00000000000000000000B2 /* Haptics.swift in Sources */,
+				FF00000000000000000000B1 /* AppSettings.swift in Sources */,
 				CEA743DB2B36B6A400DFA3CF /* TermsAndPrivacyAgreementView.swift in Sources */,
 				CEA7447F2B3ADA4B00DFA3CF /* AudioManager.swift in Sources */,
 				CE958E8A2B352C9000541C1C /* GameBoard.swift in Sources */,
@@ -416,7 +433,6 @@
 				CE958E9A2B3532DC00541C1C /* GameView.swift in Sources */,
 				CE958E922B352FED00541C1C /* TileView.swift in Sources */,
 				CEA743D72B36B62200DFA3CF /* TermsView.swift in Sources */,
-				CE958E962B35318D00541C1C /* TileViewModel.swift in Sources */,
 				CE958E8C2B352CF700541C1C /* ScoreManager.swift in Sources */,
 				CE958E762B3529E700541C1C /* ContentView.swift in Sources */,
 				CEA743DE2B36C30300DFA3CF /* InterstitialAdManager.swift in Sources */,

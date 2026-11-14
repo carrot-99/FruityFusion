@@ -1,85 +1,129 @@
 //  GameViewModel.swift
 
 import Foundation
-import SwiftUI
 
-class GameViewModel: ObservableObject {
-    @Published var gameBoard = GameBoard()
-    @Published var scoreManager = ScoreManager()
-    @Published var isGameOver = false
+/// スコア加算時の「+N」表示用
+struct ScorePopup: Identifiable, Equatable {
+    let id = UUID()
+    let points: Int
+}
 
-    init() {
-        gameBoard = GameBoard(scoreManager: scoreManager)
-        startGame()
+@MainActor
+final class GameViewModel: ObservableObject {
+    @Published private(set) var board = GameBoard()
+    @Published private(set) var score: ScoreManager
+    @Published private(set) var isGameOver = false
+    @Published private(set) var scorePopup: ScorePopup?
+    /// このゲームで到達した最高の果物
+    @Published private(set) var bestFruit: FruitType = .cherry
+
+    private var undoSnapshot: Snapshot?
+    private let storage: GameStorage
+
+    private struct Snapshot {
+        let board: GameBoard
+        let score: ScoreManager
+        let bestFruit: FruitType
     }
 
-    func startGame() {
-        gameBoard = GameBoard(scoreManager: scoreManager)
-        scoreManager.resetScore()
-        
-        addRandomTile()
-        addRandomTile()
-    }
+    var canUndo: Bool { undoSnapshot != nil }
 
-    func swipeLeft() {
-        gameBoard.swipeLeft()
-        updateGame()
-    }
+    init(resume: Bool = false, storage: GameStorage = .standard) {
+        self.storage = storage
+        self.score = ScoreManager(best: storage.highScore)
 
-    func swipeRight() {
-        gameBoard.swipeRight()
-        updateGame()
-    }
-
-    func swipeUp() {
-        gameBoard.swipeUp()
-        updateGame()
-    }
-
-    func swipeDown() {
-        gameBoard.swipeDown()
-        updateGame()
-    }
-
-    private func updateGame() {
-        addRandomTile()
-        if gameBoard.isGameOver() {
-            isGameOver = true
-            AudioManager.shared.playGameOverSound()
+        if resume, let saved = storage.loadGame() {
+            board = saved.board
+            score = ScoreManager(current: saved.score, best: storage.highScore)
+            bestFruit = saved.board.highestFruit ?? .cherry
+            isGameOver = !board.canMove
+        } else {
+            startNewGame()
         }
     }
 
-    var tiles: [[FruitTile?]] {
-        gameBoard.tiles
-    }
+    // MARK: - ユーザー操作
 
-    var score: Int {
-        scoreManager.currentScore
-    }
+    func move(_ direction: MoveDirection) {
+        guard !isGameOver else { return }
 
-    // 空いている位置にランダムなタイルを追加する
-    private func addRandomTile() {
-        var emptyPositions = [(Int, Int)]() // 空の位置を保持するための配列
-
-        // 空の位置を探します。
-        for (rowIndex, row) in gameBoard.tiles.enumerated() {
-            for (colIndex, tile) in row.enumerated() {
-                if tile == nil {
-                    emptyPositions.append((rowIndex, colIndex))
-                }
-            }
+        var newBoard = board
+        let result = newBoard.move(direction)
+        guard result.moved else {
+            Haptics.impact(.rigid)
+            return
         }
 
-        // 空の位置があれば、ランダムな位置に新しいタイルを追加します。
-        if let randomPosition = emptyPositions.randomElement() {
-            let (row, col) = randomPosition
-            let newTile = FruitTile(fruit: getRandomFruit())
-            gameBoard.tiles[row][col] = newTile
+        undoSnapshot = Snapshot(board: board, score: score, bestFruit: bestFruit)
+        newBoard.spawnRandomTile()
+        board = newBoard
+
+        apply(result)
+        isGameOver = !board.canMove
+        persist()
+
+        if isGameOver {
+            AudioManager.shared.play(.gameOver)
+            Haptics.notify(score.isNewRecord ? .success : .error)
         }
     }
-    
-    private func getRandomFruit() -> FruitType {
-        let fruits = [FruitType.cherry, FruitType.strawberry]
-        return fruits.randomElement() ?? .cherry
+
+    /// 1手前の状態に戻す（連続では使えない）
+    func undo() {
+        guard let snapshot = undoSnapshot else { return }
+        board = snapshot.board
+        score = ScoreManager(current: snapshot.score.current, best: score.best, isNewRecord: score.isNewRecord)
+        bestFruit = snapshot.bestFruit
+        isGameOver = false
+        undoSnapshot = nil
+        scorePopup = nil
+        persist()
+        Haptics.impact(.light)
+    }
+
+    func startNewGame() {
+        var newBoard = GameBoard()
+        newBoard.spawnRandomTile()
+        newBoard.spawnRandomTile()
+        board = newBoard
+        score.reset()
+        bestFruit = board.highestFruit ?? .cherry
+        isGameOver = false
+        undoSnapshot = nil
+        scorePopup = nil
+        persist()
+    }
+
+    // MARK: - 内部処理
+
+    private func apply(_ result: MoveResult) {
+        if result.scoreGained > 0 {
+            score.add(result.scoreGained)
+            storage.highScore = score.best
+            scorePopup = ScorePopup(points: result.scoreGained)
+        }
+
+        if let highest = result.mergedFruits.max(by: { $0.level < $1.level }), highest.level > bestFruit.level {
+            bestFruit = highest
+        }
+
+        if result.clearedWatermelon {
+            AudioManager.shared.play(.watermelonMerge)
+            Haptics.notify(.success)
+        } else if !result.mergedFruits.isEmpty {
+            AudioManager.shared.play(.merge)
+            Haptics.impact(.medium)
+        } else {
+            Haptics.impact(.light)
+        }
+    }
+
+    /// 進行中のゲームを保存する。終了したゲームは「つづきから」の対象にしない。
+    private func persist() {
+        if isGameOver {
+            storage.clearSavedGame()
+        } else {
+            storage.saveGame(SavedGame(board: board, score: score.current))
+        }
     }
 }

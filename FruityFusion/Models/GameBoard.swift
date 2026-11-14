@@ -2,138 +2,162 @@
 
 import Foundation
 
-struct GameBoard {
-    var tiles: [[FruitTile?]]
-    var score: Int
-    var scoreManager: ScoreManager?
+enum MoveDirection: CaseIterable {
+    case up, down, left, right
+}
 
-    init(scoreManager: ScoreManager? = nil) {
-        self.tiles = Array(repeating: Array(repeating: nil, count: 4), count: 4)
-        self.score = 0
-        self.scoreManager = scoreManager
+/// 1回の移動で起きたことのまとめ
+struct MoveResult: Equatable {
+    var moved = false
+    var scoreGained = 0
+    var mergedFruits: [FruitType] = []
+    var clearedWatermelon = false
+}
+
+/// 盤面のロジック。音やスコア保存などの副作用は持たない純粋なモデル。
+struct GameBoard: Equatable, Codable {
+    static let size = 4
+
+    struct Position: Hashable, Codable {
+        let row: Int
+        let col: Int
     }
 
-    mutating func swipeLeft() {
-        var didChange = false
-        for i in 0..<4 {
-            let originalRow = tiles[i]
-            let newRow = moveAndMergeTiles(originalRow)
-            if newRow != originalRow { // 行が変化したかどうかをチェック
-                didChange = true
-                tiles[i] = newRow
-            }
-        }
-        if didChange {
-            // スコアの更新や新しいタイルの追加など
-        }
+    struct PlacedTile: Identifiable {
+        let tile: FruitTile
+        let position: Position
+        var id: UUID { tile.id }
     }
-    
-    mutating func swipeRight() {
-        var didChange = false
-        for i in 0..<4 {
-            let originalRow = tiles[i].reversed() // 行を反転
-            let newRow = moveAndMergeTiles(Array(originalRow)).reversed() // 左方向のロジックを適用して再度反転
-            if Array(newRow) != tiles[i] {
-                didChange = true
-                tiles[i] = Array(newRow)
-            }
-        }
-        if didChange {
-            // スコアの更新や新しいタイルの追加など
-        }
-    }
-    
-    mutating func swipeUp() {
-        var didChange = false
-        for col in 0..<4 {
-            var column = [FruitTile?]() // 空の列を作成
-            for row in 0..<4 {
-                column.append(tiles[row][col]) // 現在の列を取得
-            }
-            let newColumn = moveAndMergeTiles(column)
-            if newColumn != column {
-                didChange = true
-                for row in 0..<4 {
-                    tiles[row][col] = newColumn[row] // 結果を元の位置に戻す
-                }
-            }
-        }
-        if didChange {
-            // スコアの更新や新しいタイルの追加など
-        }
-    }
-    
-    mutating func swipeDown() {
-        var didChange = false
-        for col in 0..<4 {
-            var column = [FruitTile?]() // 空の列を作成
-            for row in 0..<4 {
-                column.append(tiles[row][col]) // 現在の列を取得
-            }
-            let newColumn = moveAndMergeTiles(Array(column.reversed())).reversed() // 配列に変換してからロジックを適用し、再度反転
 
-            // 新しい列が元の列と異なるかチェック
-            if Array(newColumn) != column { // Array()を使用してReversedCollectionを配列に変換
-                didChange = true
-                for (row, tile) in newColumn.enumerated() {
-                    tiles[row][col] = tile // 新しいタイルを正しい位置に配置
-                }
-            }
-        }
-        if didChange {
-            // スコアの更新や新しいタイルの追加など
+    private(set) var tiles: [[FruitTile?]]
+
+    init() {
+        tiles = Array(repeating: Array(repeating: nil, count: Self.size), count: Self.size)
+    }
+
+    subscript(position: Position) -> FruitTile? {
+        get { tiles[position.row][position.col] }
+        set { tiles[position.row][position.col] = newValue }
+    }
+
+    // MARK: - 状態の参照
+
+    var placedTiles: [PlacedTile] {
+        allPositions.compactMap { position in
+            self[position].map { PlacedTile(tile: $0, position: position) }
         }
     }
-    
-    private mutating func moveAndMergeTiles(_ originalRow: [FruitTile?]) -> [FruitTile?] {
-        var row = originalRow.compactMap { $0 } // nilでないタイルを取得
-        var newRow: [FruitTile?] = [nil, nil, nil, nil]
-        var targetIndex = 0 // タイルを配置する次の位置
 
-        while !row.isEmpty {
-            if row.count > 1 && row[0].fruit == row[1].fruit {
-                if row[0].fruit == .watermelon {
-                    AudioManager.shared.playWatermelonMergeSound()
-                    scoreManager?.addScore(for: FruitTile(fruit: .superWatermelon, score: 4096))
-                    newRow[targetIndex] = nil
-                    targetIndex += 1
-                    newRow[targetIndex] = nil
+    var emptyPositions: [Position] {
+        allPositions.filter { self[$0] == nil }
+    }
+
+    /// 盤面上で一番進化している果物
+    var highestFruit: FruitType? {
+        placedTiles.map(\.tile.fruit).max { $0.level < $1.level }
+    }
+
+    /// まだ動かせる手があるか
+    var canMove: Bool {
+        if !emptyPositions.isEmpty { return true }
+        for row in 0..<Self.size {
+            for col in 0..<Self.size {
+                let fruit = tiles[row][col]?.fruit
+                if col + 1 < Self.size, tiles[row][col + 1]?.fruit == fruit { return true }
+                if row + 1 < Self.size, tiles[row + 1][col]?.fruit == fruit { return true }
+            }
+        }
+        return false
+    }
+
+    // MARK: - 操作
+
+    /// 指定方向にタイルを寄せて合体させる
+    mutating func move(_ direction: MoveDirection) -> MoveResult {
+        clearTurnFlags()
+        let before = tiles
+        var result = MoveResult()
+
+        for line in lines(for: direction) {
+            let collapsed = Self.collapse(line.compactMap { self[$0] }, into: &result)
+            for (position, tile) in zip(line, collapsed) {
+                self[position] = tile
+            }
+        }
+
+        result.moved = tiles != before
+        return result
+    }
+
+    /// 空いているマスにランダムなタイルを1枚追加する
+    @discardableResult
+    mutating func spawnRandomTile<G: RandomNumberGenerator>(using generator: inout G) -> Position? {
+        guard let position = emptyPositions.randomElement(using: &generator) else { return nil }
+        // さくらんぼ 80% / いちご 20%
+        let fruit: FruitType = Double.random(in: 0..<1, using: &generator) < 0.8 ? .cherry : .strawberry
+        self[position] = FruitTile(fruit: fruit, isNew: true)
+        return position
+    }
+
+    @discardableResult
+    mutating func spawnRandomTile() -> Position? {
+        var generator = SystemRandomNumberGenerator()
+        return spawnRandomTile(using: &generator)
+    }
+
+    // MARK: - 内部処理
+
+    private var allPositions: [Position] {
+        (0..<Self.size).flatMap { row in
+            (0..<Self.size).map { col in Position(row: row, col: col) }
+        }
+    }
+
+    private mutating func clearTurnFlags() {
+        for position in allPositions {
+            self[position]?.isNew = false
+            self[position]?.isMerged = false
+        }
+    }
+
+    /// 移動方向に対して「寄せる側」から並べたマスの列
+    private func lines(for direction: MoveDirection) -> [[Position]] {
+        let indices = Array(0..<Self.size)
+        return indices.map { i in
+            switch direction {
+            case .left: return indices.map { Position(row: i, col: $0) }
+            case .right: return indices.reversed().map { Position(row: i, col: $0) }
+            case .up: return indices.map { Position(row: $0, col: i) }
+            case .down: return indices.reversed().map { Position(row: $0, col: i) }
+            }
+        }
+    }
+
+    /// 1列分のタイルを先頭方向に寄せ、同じ果物を合体させる
+    private static func collapse(_ line: [FruitTile], into result: inout MoveResult) -> [FruitTile?] {
+        var output: [FruitTile?] = []
+        var index = 0
+
+        while index < line.count {
+            let current = line[index]
+            if index + 1 < line.count, line[index + 1].fruit == current.fruit {
+                if let next = current.fruit.next {
+                    output.append(FruitTile(fruit: next, isMerged: true))
+                    result.scoreGained += next.score
+                    result.mergedFruits.append(next)
                 } else {
-                    AudioManager.shared.playMergeSound() 
-                    let mergedTile = FruitTile(fruit: row[0].fruit.next())
-                    newRow[targetIndex] = mergedTile
-                    scoreManager?.addScore(for: mergedTile)
+                    // スイカ同士はボーナスを得て両方消える
+                    result.scoreGained += FruitType.watermelonClearBonus
+                    result.clearedWatermelon = true
                 }
-                row.removeFirst(2)
+                index += 2
             } else {
-                // そうでなければ、タイルを新しい行の次の位置に移動
-                newRow[targetIndex] = row.removeFirst()
-            }
-            targetIndex += 1
-        }
-
-        return newRow
-    }
-
-
-    // ゲームオーバー条件をチェックする関数
-    func isGameOver() -> Bool {
-        for row in 0..<4 {
-            for col in 0..<4 {
-                if tiles[row][col] == nil {
-                    // 空きタイルがあれば、まだゲームオーバーではない
-                    return false
-                }
-                // 隣接するタイルとの合体可能性をチェック
-                if col < 3, let current = tiles[row][col], let right = tiles[row][col + 1], current.fruit == right.fruit {
-                    return false
-                }
-                if row < 3, let current = tiles[row][col], let down = tiles[row + 1][col], current.fruit == down.fruit {
-                    return false
-                }
+                output.append(current)
+                index += 1
             }
         }
-        // どのタイルも動かせない場合はゲームオーバー
-        return true
+
+        output.append(contentsOf: Array(repeating: nil, count: size - output.count))
+        return output
     }
 }

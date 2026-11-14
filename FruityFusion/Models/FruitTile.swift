@@ -2,8 +2,8 @@
 
 import Foundation
 
-// 果物の種類を表す列挙型
-enum FruitType: String, CaseIterable {
+/// 果物の種類。宣言順がそのまま進化の順番になる。
+enum FruitType: String, CaseIterable, Codable {
     case cherry = "Cherry"
     case strawberry = "Strawberry"
     case grape = "Grape"
@@ -15,38 +15,61 @@ enum FruitType: String, CaseIterable {
     case peach = "Peach"
     case melon = "Melon"
     case watermelon = "Watermelon"
-    case superWatermelon = "SuperWatermelon"
-    
-    
-    func next() -> FruitType {
-        if self == .watermelon {
-            return .superWatermelon
+
+    /// スイカ同士を合体させたときのボーナス得点（両方とも盤面から消える）
+    static let watermelonClearBonus = 4096
+
+    /// 進化段階（さくらんぼ = 1）
+    var level: Int {
+        (Self.allCases.firstIndex(of: self) ?? 0) + 1
+    }
+
+    /// 次の進化先。スイカは最終段階なので nil。
+    var next: FruitType? {
+        let all = Self.allCases
+        guard let index = all.firstIndex(of: self), index + 1 < all.count else { return nil }
+        return all[index + 1]
+    }
+
+    /// この果物が合体で生まれたときに加算される得点（2, 4, 8, ... 2048）
+    var score: Int {
+        1 << level
+    }
+
+    var imageName: String {
+        "\(rawValue)TileImage"
+    }
+
+    var displayName: String {
+        switch self {
+        case .cherry: return "さくらんぼ"
+        case .strawberry: return "いちご"
+        case .grape: return "ぶどう"
+        case .dekopon: return "デコポン"
+        case .persimmon: return "かき"
+        case .apple: return "りんご"
+        case .pear: return "なし"
+        case .pineapple: return "パイナップル"
+        case .peach: return "もも"
+        case .melon: return "メロン"
+        case .watermelon: return "スイカ"
         }
-        if let currentIndex = FruitType.allCases.firstIndex(of: self),
-           currentIndex + 1 < FruitType.allCases.count {
-            return FruitType.allCases[currentIndex + 1]
-        }
-        return self // 最後の進化段階の場合はそのまま
     }
 }
 
-// ゲームのタイルを表す構造体
-struct FruitTile: Equatable {
+/// 盤面上の1枚のタイル
+struct FruitTile: Identifiable, Equatable, Codable {
+    let id: UUID
     var fruit: FruitType
-    var score: Int
+    /// 直前のターンで新しく出現したタイルか
+    var isNew: Bool
+    /// 直前のターンで合体して生まれたタイルか
+    var isMerged: Bool
 
-    // 果物に応じたタイルの初期化
-    init(fruit: FruitType, score: Int? = nil) {
+    init(id: UUID = UUID(), fruit: FruitType, isNew: Bool = false, isMerged: Bool = false) {
+        self.id = id
         self.fruit = fruit
-        self.score = score ?? 0
-    }
-
-    // タイルを次の進化段階に更新する関数
-    mutating func evolve() {
-        if let currentIndex = FruitType.allCases.firstIndex(of: self.fruit),
-           currentIndex + 1 < FruitType.allCases.count {
-            let nextFruit = FruitType.allCases[currentIndex + 1]
-            self.fruit = nextFruit
-        }
+        self.isNew = isNew
+        self.isMerged = isMerged
     }
 }
